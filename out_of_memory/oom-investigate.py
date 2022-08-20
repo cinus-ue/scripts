@@ -345,7 +345,7 @@ def get_log_file_start_date(LOG_FILE, oom_date_count, all_killed_services):
     '''
     normal_file = (False if LOG_FILE.endswith('.gz') else True)
     inLogFile = openfile(LOG_FILE, normal_file)
-    first_line = inLogFile.readline().split()[0:3]
+    first_line = inLogFile.readline()
     lineList = inLogFile.readlines()
     inLogFile.close()
     try:
@@ -357,6 +357,11 @@ def get_log_file_start_date(LOG_FILE, oom_date_count, all_killed_services):
         print("             {0}".format(LOG_FILE))
         print("")
         sys.exit(1)
+    if isinstance(first_line, bytes):
+        first_line = first_line.decode('utf-8')
+    if isinstance(last_line, bytes):
+        last_line = last_line.decode('utf-8')
+    first_line = first_line.split()[0:3]
     last_line = last_line.split()[0:3]
     print("")
     print(bcolors.UNDERLINE + "Log Information" + bcolors.ENDC)
